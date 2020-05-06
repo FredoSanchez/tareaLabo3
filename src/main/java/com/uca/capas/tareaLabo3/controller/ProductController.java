@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.uca.capas.tareaLabo3.domain.Product;
@@ -33,8 +32,14 @@ public class ProductController {
 	}
 	
 	@PostMapping("/validar")
-	@ResponseBody
-	public String validar(Product product) {
-		return productos.get(product.getId()).getNombre();		
+	public ModelAndView validar(Product product) {
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("product", productos.get(product.getId()).getNombre());
+		
+		if(productos.get(product.getId()).getCantidad() >= product.getCantidad() && product.getCantidad() > 0) { mav.setViewName("compra"); }
+		else {
+			mav.setViewName("error");
+		}
+		return mav;
 	}
 }
